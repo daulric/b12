@@ -19,7 +19,14 @@ function normalizePrefix(prefix: string | null): string {
   const trimmed = prefix.trim()
   if (!trimmed) return ''
   // Storage list() expects path without leading slash
-  return trimmed.replace(/^\/+/, '').replace(/\/+$/, '')
+  // Safe slash trimming
+  let start = 0
+  while (start < trimmed.length && trimmed[start] === '/') start++
+  
+  let end = trimmed.length
+  while (end > start && trimmed[end - 1] === '/') end--
+  
+  return trimmed.substring(start, end)
 }
 
 type StorageListItem = (FileObject & { id: string }) | { name: string; id: null }

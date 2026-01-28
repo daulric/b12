@@ -13,15 +13,31 @@ function isValidBucketId(bucketId: string) {
   return /^[a-z0-9][a-z0-9_-]{1,61}[a-z0-9]$/.test(bucketId)
 }
 
+function trimSlashes(str: string): string {
+  let start = 0
+  while (start < str.length && str[start] === '/') start++
+  
+  let end = str.length
+  while (end > start && str[end - 1] === '/') end--
+  
+  return str.substring(start, end)
+}
+
+function trimLeadingSlashes(str: string): string {
+  let start = 0
+  while (start < str.length && str[start] === '/') start++
+  return str.substring(start)
+}
+
 function normalizePrefix(prefix: string | null): string {
   if (!prefix) return ''
   const trimmed = prefix.trim()
   if (!trimmed) return ''
-  return trimmed.replace(/^\/+/, '').replace(/\/+$/, '')
+  return trimSlashes(trimmed)
 }
 
 function safeFileName(name: string): string | null {
-  const trimmed = name.trim().replace(/^\/+/, '')
+  const trimmed = trimLeadingSlashes(name.trim())
   if (!trimmed) return null
   if (trimmed.includes('..')) return null
   if (trimmed.includes('/')) return null

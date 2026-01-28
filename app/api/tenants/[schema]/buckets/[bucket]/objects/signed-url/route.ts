@@ -15,10 +15,16 @@ function isValidBucketId(bucketId: string) {
 
 function normalizePath(path: string | null): string | null {
   if (!path) return null
-  const trimmed = path.trim().replace(/^\/+/, '')
-  if (!trimmed) return null
-  if (trimmed.includes('..')) return null
-  return trimmed
+  const trimmed = path.trim()
+  
+  // Safe leading slash trimming
+  let start = 0
+  while (start < trimmed.length && trimmed[start] === '/') start++
+  const result = trimmed.substring(start)
+
+  if (!result) return null
+  if (result.includes('..')) return null
+  return result
 }
 
 // GET /api/tenants/[schema]/buckets/[bucket]/objects/signed-url?path=folder/file.png
