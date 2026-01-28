@@ -76,10 +76,39 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Run \`bunx tsc --noEmit\` locally to see all errors." >> $GITHUB_STEP_SUMMARY
 
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run Tests
+        run: bun test
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck]
+    needs: [lint, typecheck, test]
     
     steps:
       - name: Checkout code
@@ -153,7 +182,7 @@ jobs:
   ci-success:
     name: CI Success
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, build]
+    needs: [lint, typecheck, test, build]
     if: always()
     
     steps:
@@ -161,6 +190,7 @@ jobs:
         run: |
           if [ "${{ needs.lint.result }}" != "success" ] || \
              [ "${{ needs.typecheck.result }}" != "success" ] || \
+             [ "${{ needs.test.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ]; then
             echo "❌ One or more checks failed"
             exit 1

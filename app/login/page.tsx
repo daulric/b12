@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'

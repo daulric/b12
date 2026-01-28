@@ -58,6 +58,21 @@ jobs:
         run: |
           ./osv-scanner --lockfile=bun.lock --format=table
 
+  semgrep:
+    name: Semgrep SAST
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Run Semgrep
+        run: semgrep scan --config=auto --error
+
   secret-scanning:
     name: Secret Scanning
     runs-on: ubuntu-latest
