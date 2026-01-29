@@ -15,11 +15,21 @@ function isValidBucketId(bucketId: string) {
 }
 
 function normalizePath(path: string | null): string | null {
-  if (!path) return null
-  const trimmed = path.trim().replace(/^\/+/, '').replace(/\/+$/, '')
-  if (!trimmed) return null
-  if (trimmed.includes('..')) return null
-  return trimmed
+  if (!path || path.length > 1024) return null
+  const trimmed = path.trim()
+
+  // Safe slash trimming (ReDoS safe replacement for regex)
+  let start = 0
+  while (start < trimmed.length && trimmed[start] === '/') start++
+  
+  let end = trimmed.length
+  while (end > start && trimmed[end - 1] === '/') end--
+  
+  const result = trimmed.substring(start, end)
+
+  if (!result) return null
+  if (result.includes('..')) return null
+  return result
 }
 
 function chunk<T>(arr: T[], size: number): T[][] {
