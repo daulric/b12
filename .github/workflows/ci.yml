@@ -108,6 +108,15 @@ jobs:
       - name: Run Tests
         run: bun test
 
+      - name: Test summary
+        if: success()
+        run: |
+          echo "## ✅ Tests Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Suite | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Component tests (test/) | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -178,6 +187,7 @@ jobs:
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| ESLint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           echo "| TypeScript | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Component tests | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Next.js Build | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
           echo "| Supabase | ✅ Local instance |" >> $GITHUB_STEP_SUMMARY
 

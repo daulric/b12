@@ -37,7 +37,7 @@ function InputOTPSlot({
 }: React.ComponentProps<"div"> & {
   index: number
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext)
+  const inputOTPContext = React.use(OTPInputContext)
   const slot = inputOTPContext.slots[index]
 
   if (!slot) return <div className={cn("hidden", className)} {...props} />

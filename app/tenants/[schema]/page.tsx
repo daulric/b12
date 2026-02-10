@@ -267,7 +267,7 @@ export default async function SchemaDetailPage({ params }: PageProps) {
           </div>
           
           {user.isAdmin || tables.length > 0 ? (
-            <SchemaTableList tables={tables} schemaName={schema} canWrite={canWrite} />
+            <SchemaTableList key={tables.map((t) => t.table_name).join(',')} tables={tables} schemaName={schema} canWrite={canWrite} />
           ) : (
             <Card>
               <CardContent className="py-8 text-center">

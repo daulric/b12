@@ -180,13 +180,8 @@ const validateName = (name: string, type: 'table' | 'column'): string | null => 
 
 export function SchemaTableList({ tables: initialTables, schemaName, canWrite = true }: SchemaTableListProps) {
   const router = useRouter()
-  const [tables, setTables] = useState(initialTables)
-  const [expandedTables, setExpandedTables] = useState<Set<string>>(new Set())
-  
-  // Sync state with props when initialTables changes (after router.refresh())
-  useEffect(() => {
-    setTables(initialTables)
-  }, [initialTables])
+  const [tables, setTables] = useState(() => initialTables)
+  const [expandedTables, setExpandedTables] = useState<Set<string>>(() => new Set())
   const [columns, setColumns] = useState<Record<string, TableColumn[]>>({})
   const [foreignKeys, setForeignKeys] = useState<Record<string, ForeignKey[]>>({})
   const [rowCounts, setRowCounts] = useState<Record<string, number>>({})
@@ -213,7 +208,7 @@ export function SchemaTableList({ tables: initialTables, schemaName, canWrite = 
   // Create table dialog
   const [createTableDialog, setCreateTableDialog] = useState(false)
   const [newTableName, setNewTableName] = useState('')
-  const [newTableColumns, setNewTableColumns] = useState<NewColumnDef[]>([
+  const [newTableColumns, setNewTableColumns] = useState<NewColumnDef[]>(() => [
     { ...createEmptyColumn(), name: 'id', type: 'uuid', nullable: false, primary_key: true, default: 'gen_random_uuid()' },
     { ...createEmptyColumn(), name: 'created_at', type: 'timestamp with time zone', nullable: false, default: 'NOW()' },
   ])
@@ -277,7 +272,7 @@ export function SchemaTableList({ tables: initialTables, schemaName, canWrite = 
     if (newFk.refSchema && newFk.refTable) {
       loadRefTableColumns(newFk.refSchema, newFk.refTable)
     } else {
-      setRefTableColumns([])
+      queueMicrotask(() => setRefTableColumns([]))
     }
   }, [newFk.refSchema, newFk.refTable])
 

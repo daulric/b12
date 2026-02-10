@@ -312,7 +312,7 @@ export function SchemaBucketsPanel({
                       const target = arr.slice(0, idx + 1).join('/')
                       const isLast = idx === arr.length - 1
                       return (
-                        <div key={`${target}:${idx}`} className="flex items-center gap-2">
+                        <div key={target} className="flex items-center gap-2">
                           <button
                             type="button"
                             className={`text-sm ${isLast ? 'text-foreground' : 'text-muted-foreground hover:underline'}`}
