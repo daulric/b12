@@ -253,7 +253,7 @@ async function getTenants(): Promise<TenantWithProducts[]> {
 
 async function TenantList() {
   const tenants = await getTenants()
-  return <TenantTable initialTenants={tenants} />
+  return <TenantTable key={tenants.map((t) => t.schema_name).join(',')} initialTenants={tenants} />
 }
 
 export default async function TenantsPage() {

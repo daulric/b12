@@ -30,8 +30,8 @@ export function TenantTableSkeleton() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i}>
+            {['sk-1', 'sk-2', 'sk-3', 'sk-4', 'sk-5'].map((id) => (
+              <TableRow key={id}>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-4 w-4" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { TenantWithProducts, TenantStatus } from '@/types/database'
 import {
@@ -52,15 +52,10 @@ interface TenantTableProps {
 }
 
 export function TenantTable({ initialTenants }: TenantTableProps) {
-  const [tenants, setTenants] = useState<TenantWithProducts[]>(initialTenants)
+  const [tenants, setTenants] = useState<TenantWithProducts[]>(() => initialTenants)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<TenantStatus | 'all'>('all')
   const [isLoading, setIsLoading] = useState<string | null>(null)
-  
-  // Sync state with props when initialTenants changes (after router.refresh())
-  useEffect(() => {
-    setTenants(initialTenants)
-  }, [initialTenants])
   
   // Delete confirmation dialog state
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; schema: string | null }>({

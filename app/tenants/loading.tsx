@@ -38,8 +38,8 @@ export default function Loading() {
               <div className="space-y-3">
                 <Skeleton className="h-4 w-32" />
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton key={i} className="h-20" />
+                  {['sk-1', 'sk-2', 'sk-3', 'sk-4', 'sk-5', 'sk-6'].map((id) => (
+                    <Skeleton key={id} className="h-20" />
                   ))}
                 </div>
               </div>
